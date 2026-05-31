@@ -184,6 +184,47 @@ public class WmsStockInOrdersController {
 		return Result.OK(wmsStockInOrderItemsList);
 	}
 
+	/**
+	 * 提交审核
+	 */
+	@AutoLog(value = "入库单-提交审核")
+	@Operation(summary="入库单-提交审核")
+	@PostMapping(value = "/submitAudit")
+	public Result<String> submitAudit(@RequestParam(name="id") String id) {
+		wmsStockInOrdersService.submitAudit(id);
+		return Result.OK("提交审核成功");
+	}
+
+	/**
+	 * 审核
+	 */
+	@AutoLog(value = "入库单-审核")
+	@Operation(summary="入库单-审核")
+	@PostMapping(value = "/audit")
+	public Result<String> audit(@RequestParam(name="id") String id) {
+		wmsStockInOrdersService.audit(id);
+		return Result.OK("审核成功");
+	}
+
+	/**
+	 * 创建收货任务
+	 */
+	@AutoLog(value = "入库单-创建收货任务")
+	@Operation(summary="入库单-创建收货任务")
+	@PostMapping(value = "/createReceiveTask")
+	public Result<String> createReceiveTask(@RequestBody Map<String, Object> params) {
+		@SuppressWarnings("unchecked")
+		List<String> orderIds = (List<String>) params.get("orderIds");
+		String warehouseId = (String) params.get("warehouseId");
+		if (orderIds == null || orderIds.isEmpty()) {
+			return Result.error("入库单ID不能为空");
+		}
+		for (String id : orderIds) {
+			wmsStockInOrdersService.createReceiveTask(id, warehouseId);
+		}
+		return Result.OK("收货任务创建成功");
+	}
+
     /**
     * 导出excel
     *

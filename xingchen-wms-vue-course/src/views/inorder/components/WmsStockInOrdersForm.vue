@@ -32,7 +32,7 @@
     import {BasicForm, useForm} from '/@/components/Form/index';
     import { JVxeTable } from '/@/components/jeecg/JVxeTable'
     import { useJvxeMethod } from '/@/hooks/system/useJvxeMethods.ts'
-    import {formSchema} from '../WmsStockInOrders.data';
+    import {formSchema, wmsStockInOrderItemsColumns} from '../WmsStockInOrders.data';
     import {saveOrUpdate,queryWmsStockInOrderItems} from '../WmsStockInOrders.api';
     import { VALIDATE_FAILED } from '/@/utils/common/vxeUtils'
     const isUpdate = ref(true);
@@ -44,7 +44,7 @@
     const wmsStockInOrderItemsTable = reactive({
           loading: false,
           dataSource: [],
-          columns:wmsStockInOrderItemsJVxeColumns,
+          columns:wmsStockInOrderItemsColumns,
           show: false
     })
 

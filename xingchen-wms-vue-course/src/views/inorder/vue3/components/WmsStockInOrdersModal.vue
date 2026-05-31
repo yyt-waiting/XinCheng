@@ -28,8 +28,8 @@
     import {BasicForm, useForm} from '/@/components/Form/index';
     import { JVxeTable } from '/@/components/jeecg/JVxeTable'
     import { useJvxeMethod } from '/@/hooks/system/useJvxeMethods.ts'
-    import {formSchema,wmsStockInOrderItemsColumns} from '../WmsStockInOrders.data';
-    import {saveOrUpdate,wmsStockInOrderItemsList} from '../WmsStockInOrders.api';
+    import {formSchema,wmsStockInOrderItemsColumns} from './WmsStockInOrders.data';
+    import {saveOrUpdate,wmsStockInOrderItemsList} from './WmsStockInOrders.api';
     import { VALIDATE_FAILED } from '/@/utils/common/vxeUtils'
     // Emits声明
     const emit = defineEmits(['register','success']);

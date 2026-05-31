@@ -29,11 +29,10 @@
     import { JVxeTable } from '/@/components/jeecg/JVxeTable'
     import { useJvxeMethod } from '/@/hooks/system/useJvxeMethods.ts'
     import {
-      createWmsStockInOrderItemsJVxeColumns,
+      wmsStockInOrderItemsColumns,
       formSchema,
-      // wmsStockInOrderItemsJVxeColumns
     } from '../WmsStockInOrders.data';
-    import {saveOrUpdate,queryWmsStockInOrderItems} from '../WmsStockInOrders.api';
+    import {saveOrUpdate, queryWmsStockInOrderItems} from '../WmsStockInOrders.api';
     import { VALIDATE_FAILED } from '/@/utils/common/vxeUtils'
 
     // Emits声明
@@ -48,7 +47,7 @@
 
 
     //表单配置
-    const [registerForm, {setProps,resetFields, setFieldsValue,getFieldsValue,validate}] = useForm({
+    const [registerForm, {setProps,resetFields, setFieldsValue,validate}] = useForm({
         schemas: formSchema,
         showActionButtonGroup: false,
         baseColProps: {span: 12},
@@ -57,7 +56,7 @@
     const wmsStockInOrderItemsTable = reactive({
       loading: false,
       dataSource: [],
-      columns:createWmsStockInOrderItemsJVxeColumns(getFieldsValue)
+      columns: wmsStockInOrderItemsColumns
     })
      //表单赋值
     const [registerModal, {setModalProps, closeModal}] = useModalInner(async (data) => {

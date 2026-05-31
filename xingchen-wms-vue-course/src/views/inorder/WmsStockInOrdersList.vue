@@ -167,9 +167,9 @@
       createMessage.warn('请至少选择一条数据')
       return;
     }
-    //遍历rowSelection.selectedRows,如果存在状态不为APPROVED的则不能继续
+    //遍历rowSelection.selectedRows,如果存在状态不为2(审核通过)的则不能继续
     for(let i=0;i<rowSelection.selectedRows.length;i++){
-      if(rowSelection.selectedRows[i].status != "APPROVED"){
+      if(rowSelection.selectedRows[i].status != "2"){
         createMessage.warn('存在未审核通过的记录，审核通过时方可创建收货任务')
         return;
       }

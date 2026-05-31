@@ -35,8 +35,8 @@
   import { propTypes } from '/@/utils/propTypes';
   import { useJvxeMethod } from '/@/hooks/system/useJvxeMethods';
   import { VALIDATE_FAILED } from '/@/utils/common/vxeUtils';
-  import {getBpmFormSchema,wmsStockInOrderItemsColumns} from '../WmsStockInOrders.data';
-  import {saveOrUpdate,wmsStockInOrderItemsList} from '../WmsStockInOrders.api';
+  import {getBpmFormSchema,wmsStockInOrderItemsColumns} from './WmsStockInOrders.data';
+  import {saveOrUpdate,wmsStockInOrderItemsList} from './WmsStockInOrders.api';
 
   export default defineComponent({
     name: "WmsStockInOrdersForm",

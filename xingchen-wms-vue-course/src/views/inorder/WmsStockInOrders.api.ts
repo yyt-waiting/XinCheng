@@ -4,7 +4,7 @@ import { useMessage } from "/@/hooks/web/useMessage";
 const { createConfirm } = useMessage();
 
 enum Api {
-  createReceiveTask='/inorder/receiveTasks/add',
+  createReceiveTask='/inorder/wmsStockInOrders/createReceiveTask',
   list = '/inorder/wmsStockInOrders/list',
   save='/inorder/wmsStockInOrders/add',
   edit='/inorder/wmsStockInOrders/edit',
@@ -68,10 +68,7 @@ export const submitAudit = (params,handleSuccess) => {
  * 创建收货任务
  */
 export const createReceiveTask = (params) => {
-  return defHttp.post({url: Api.createReceiveTask, params}, {joinParamsToUrl: true});
-  // return defHttp.post({url: Api.createReceiveTask, params}, {joinParamsToUrl: true}).then(() => {
-  //   handleSuccess();
-  // });
+  return defHttp.post({url: Api.createReceiveTask, params});
 }
 /**
  * 批量删除
@@ -105,7 +102,7 @@ export const saveOrUpdate = (params, isUpdate) => {
  */
 export const submitAuditForm = (params) => {
   let url =  Api.audit;
-  return defHttp.post({url: url, params});
+  return defHttp.post({url: url, params}, {joinParamsToUrl: true});
 }
 /**
  * 子表列表接口

@@ -44,5 +44,24 @@ public interface IWmsStockInOrdersService extends IService<WmsStockInOrders> {
 	 * @param idList
 	 */
 	public void delBatchMain (Collection<? extends Serializable> idList);
-	
+
+	/**
+	 * 提交审核：状态 0(初始) -> 1(已提交)
+	 * @param id 入库单id
+	 */
+	public void submitAudit(String id);
+
+	/**
+	 * 审核通过：状态 1(已提交) -> 2(审核通过)
+	 * @param id 入库单id
+	 */
+	public void audit(String id);
+
+	/**
+	 * 创建收货任务（从入库单生成）
+	 * @param id 入库单id
+	 * @param warehouseId 仓库id
+	 */
+	public void createReceiveTask(String id, String warehouseId);
+
 }

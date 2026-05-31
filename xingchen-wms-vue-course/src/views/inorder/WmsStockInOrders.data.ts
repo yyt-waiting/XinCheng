@@ -90,20 +90,18 @@ export const searchFormSchema: FormSchema[] = [
   {
     label: '货主',
     field: 'ownerId',
-    component: 'JTreeSelect',
+    component: 'JSearchSelectTag',
     componentProps: {
-      dict: 'wms_cargo_owners,name,owner_id',
-      pidField: 'pid',
+      dict: 'wms_cargo_owners,owner_name,id',
     },
     colProps: {span: 6},
   },
   {
     label: '仓库',
     field: 'warehouseId',
-    component: 'JTreeSelect',
+    component: 'JSearchSelectTag',
     componentProps: {
-      dict: 'wms_warehouse,name,warehouse_id',
-      pidField: 'pid',
+      dict: 'wms_warehouses,warehouse_name,id',
     },
     colProps: {span: 6},
   },
@@ -150,10 +148,9 @@ export const formSchema: FormSchema[] = [
   {
     label: '货主',
     field: 'ownerId',
-    component: 'JTreeSelect',
+    component: 'JSearchSelectTag',
     componentProps: {
-      dict: 'wms_cargo_owners,name,owner_id',
-      pidField: 'pid',
+      dict: 'wms_cargo_owners,owner_name,id',
     },
     colProps: {span: 12},
     dynamicRules: ({model, schema}) => {
@@ -163,10 +160,9 @@ export const formSchema: FormSchema[] = [
   {
     label: '仓库',
     field: 'warehouseId',
-    component: 'JTreeSelect',
+    component: 'JSearchSelectTag',
     componentProps: {
-      dict: 'wms_warehouse,name,warehouse_id',
-      pidField: 'pid',
+      dict: 'wms_warehouses,warehouse_name,id',
     },
     colProps: {span: 12},
     dynamicRules: ({model, schema}) => {
@@ -268,10 +264,9 @@ export const formAddSchema: FormSchema[] = [
   {
     label: '货主',
     field: 'ownerId',
-    component: 'JTreeSelect',
+    component: 'JSearchSelectTag',
     componentProps: {
-      dict: 'wms_cargo_owners,name,owner_id',
-      pidField: 'pid',
+      dict: 'wms_cargo_owners,owner_name,id',
     },
     colProps: {span: 12},
     dynamicRules: ({model, schema}) => {
@@ -281,10 +276,9 @@ export const formAddSchema: FormSchema[] = [
   {
     label: '仓库',
     field: 'warehouseId',
-    component: 'JTreeSelect',
+    component: 'JSearchSelectTag',
     componentProps: {
-      dict: 'wms_warehouse,name,warehouse_id',
-      pidField: 'pid',
+      dict: 'wms_warehouses,warehouse_name,id',
     },
     colProps: {span: 12},
     dynamicRules: ({model, schema}) => {
@@ -377,10 +371,9 @@ export const receiveTaskAdd: FormSchema[] = [
   {
     label: '仓库',
     field: 'warehouseId',
-    component: 'JTreeSelect',
+    component: 'JSearchSelectTag',
     componentProps: {
-      dict: 'wms_warehouse,name,warehouse_id',
-      pidField: 'pid',
+      dict: 'wms_warehouses,warehouse_name,id',
     },
     colProps: {span: 24},
     dynamicRules: ({model, schema}) => {
@@ -390,92 +383,64 @@ export const receiveTaskAdd: FormSchema[] = [
 ];
 
 // JVxe 子表列定义 - 入库单明细
-export const createWmsStockInOrderItemsJVxeColumns = (getFieldsValue) => {
-  return [
-    {
-      title: '商品',
-      key: 'productName',
-      type: 'input',
-      width: 180,
-      placeholder: '请输入${title}',
-      defaultValue: '',
-    },
-    {
-      title: '采购数量',
-      key: 'expectedQuantity',
-      type: 'number',
-      width: 120,
-      placeholder: '请输入${title}',
-      defaultValue: '',
-    },
-    {
-      title: '实际收货数量',
-      key: 'quantity',
-      type: 'number',
-      width: 140,
-      placeholder: '请输入${title}',
-      defaultValue: '',
-    },
-    {
-      title: '库存属性',
-      key: 'inventoryAttribute',
-      type: 'select',
-      width: 120,
-      options: [], // 数据字典动态加载
-      placeholder: '请选择${title}',
-      defaultValue: '',
-    },
-    {
-      title: '储位编码',
-      key: 'locationCode',
-      type: 'input',
-      width: 140,
-      placeholder: '请输入${title}',
-      defaultValue: '',
-    },
-    {
-      title: 'LPN',
-      key: 'lpn',
-      type: 'input',
-      width: 120,
-      placeholder: '请输入${title}',
-      defaultValue: '',
-    },
-    {
-      title: '批次号',
-      key: 'batchNumber',
-      type: 'input',
-      width: 140,
-      placeholder: '请输入${title}',
-      defaultValue: '',
-    },
-    {
-      title: '保质期到期时间',
-      key: 'expiryDate',
-      type: 'date',
-      width: 160,
-      placeholder: '请输入${title}',
-      defaultValue: '',
-    },
-    {
-      title: '收货类型',
-      key: 'receivingType',
-      type: 'select',
-      width: 120,
-      options: [],
-      placeholder: '请选择${title}',
-      defaultValue: '',
-    },
-    {
-      title: '备注',
-      key: 'remarks',
-      type: 'input',
-      width: 180,
-      placeholder: '请输入${title}',
-      defaultValue: '',
-    },
-  ];
-};
+export const wmsStockInOrderItemsColumns = [
+  {
+    title: '商品ID',
+    key: 'productId',
+    type: 'input',
+    width: 160,
+    placeholder: '请输入商品ID',
+    defaultValue: '',
+  },
+  {
+    title: '采购数量',
+    key: 'expectedQuantity',
+    type: 'number',
+    width: 120,
+    placeholder: '请输入${title}',
+    defaultValue: '',
+  },
+  {
+    title: '实际收货数量',
+    key: 'receivedQuantity',
+    type: 'number',
+    width: 140,
+    placeholder: '请输入${title}',
+    defaultValue: '',
+  },
+  {
+    title: '上架数量',
+    key: 'shelvedQuantity',
+    type: 'number',
+    width: 120,
+    placeholder: '请输入${title}',
+    defaultValue: '',
+  },
+  {
+    title: '不良品数量',
+    key: 'defectiveQuantity',
+    type: 'number',
+    width: 120,
+    placeholder: '请输入${title}',
+    defaultValue: '',
+  },
+  {
+    title: '状态',
+    key: 'status',
+    type: 'input',
+    width: 120,
+    placeholder: '请输入${title}',
+    defaultValue: '',
+  },
+  {
+    title: '备注',
+    key: 'remarks',
+    type: 'input',
+    width: 200,
+    placeholder: '请输入${title}',
+    defaultValue: '',
+  },
+];
 
 // 高级查询数据
 export const superQuerySchema = {

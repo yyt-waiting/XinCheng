@@ -10,9 +10,11 @@
     import {BasicForm, useForm} from '/@/components/Form/index';
     import {receiveTaskAdd} from '../WmsStockInOrders.data';
     import {createReceiveTask, saveOrUpdate} from '../WmsStockInOrders.api';
+    import {useMessage} from "/@/hooks/web/useMessage";
     // Emits声明
     const emit = defineEmits(['register','success']);
     const orderIds = ref('');
+    const { createMessage } = useMessage();
     //表单配置
     const [registerForm, { setProps,resetFields, setFieldsValue, validate, scrollToField }] = useForm({
         labelWidth: 150,
@@ -36,18 +38,22 @@
             setModalProps({confirmLoading: true});
             //提交表单
             await createReceiveTask({orderIds:orderIds.value,...values});
+            createMessage.success('收货任务创建成功');
             //关闭弹窗
             closeModal();
             //刷新列表
             emit('success');
-        } catch ({ errorFields }) {
-          if (errorFields) {
-            const firstField = errorFields[0];
+        } catch (e: any) {
+          // 表单验证错误
+          if (e && e.errorFields) {
+            const firstField = e.errorFields[0];
             if (firstField) {
               scrollToField(firstField.name, { behavior: 'smooth', block: 'center' });
             }
+            return Promise.reject(e);
           }
-          return Promise.reject(errorFields);
+          // 后端业务错误，已由全局拦截器处理（createMessage.error）
+          // 不再向上抛出，避免 Vue warn
         } finally {
             setModalProps({confirmLoading: false});
         }
