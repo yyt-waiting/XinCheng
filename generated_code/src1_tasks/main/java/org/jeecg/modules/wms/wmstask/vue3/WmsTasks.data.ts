@@ -1,0 +1,291 @@
+import {BasicColumn} from '/@/components/Table';
+import {FormSchema} from '/@/components/Table';
+import { rules} from '/@/utils/helper/validator';
+import { render } from '/@/utils/common/renderUtils';
+import { getWeekMonthQuarterYear } from '/@/utils';
+//列表数据
+export const columns: BasicColumn[] = [
+   {
+    title: '任务号',
+    align:"center",
+    dataIndex: 'taskNumber'
+   },
+   {
+    title: '任务类型',
+    align:"center",
+    dataIndex: 'taskType'
+   },
+   {
+    title: '任务状态',
+    align:"center",
+    dataIndex: 'taskStatus'
+   },
+   {
+    title: '商品id',
+    align:"center",
+    dataIndex: 'productId'
+   },
+   {
+    title: '数量',
+    align:"center",
+    dataIndex: 'quantity'
+   },
+   {
+    title: '完成数量',
+    align:"center",
+    dataIndex: 'completedQuantity'
+   },
+   {
+    title: '来源储位编码',
+    align:"center",
+    dataIndex: 'sourceLocationCode'
+   },
+   {
+    title: '目的储位编码',
+    align:"center",
+    dataIndex: 'targetLocationCode'
+   },
+   {
+    title: '来源容器编码',
+    align:"center",
+    dataIndex: 'sourceContainerCode'
+   },
+   {
+    title: '目的容器编码',
+    align:"center",
+    dataIndex: 'targetContainerCode'
+   },
+   {
+    title: '执行人',
+    align:"center",
+    dataIndex: 'operator'
+   },
+   {
+    title: '执行时间',
+    align:"center",
+    dataIndex: 'operationTime'
+   },
+   {
+    title: '完成时间',
+    align:"center",
+    dataIndex: 'completedAt'
+   },
+   {
+    title: '入库单id',
+    align:"center",
+    dataIndex: 'stockInOrderId'
+   },
+   {
+    title: '入库明细id',
+    align:"center",
+    dataIndex: 'stockInOrderItemId'
+   },
+   {
+    title: '波次单id',
+    align:"center",
+    dataIndex: 'waveOrderId'
+   },
+   {
+    title: '批次号',
+    align:"center",
+    dataIndex: 'batchNumber'
+   },
+   {
+    title: '保质期',
+    align:"center",
+    dataIndex: 'expiryDate',
+    customRender:({text}) =>{
+      text = !text ? "" : (text.length > 10 ? text.substr(0,10) : text);
+      return text;
+    },
+   },
+   {
+    title: '出库单id',
+    align:"center",
+    dataIndex: 'outOrderId'
+   },
+   {
+    title: '波次拣货明细id',
+    align:"center",
+    dataIndex: 'waveSkuSummaryId'
+   },
+   {
+    title: '来源仓库',
+    align:"center",
+    dataIndex: 'sourceWarehouseId'
+   },
+   {
+    title: '目的仓库',
+    align:"center",
+    dataIndex: 'targetWarehouseId'
+   },
+];
+//查询数据
+export const searchFormSchema: FormSchema[] = [
+];
+//表单数据
+export const formSchema: FormSchema[] = [
+  {
+    label: '任务号',
+    field: 'taskNumber',
+    component: 'Input',
+  },
+  {
+    label: '任务类型',
+    field: 'taskType',
+    component: 'Input',
+  },
+  {
+    label: '任务状态',
+    field: 'taskStatus',
+    component: 'Input',
+  },
+  {
+    label: '商品id',
+    field: 'productId',
+    component: 'Input',
+  },
+  {
+    label: '数量',
+    field: 'quantity',
+    component: 'InputNumber',
+  },
+  {
+    label: '完成数量',
+    field: 'completedQuantity',
+    component: 'InputNumber',
+  },
+  {
+    label: '来源储位编码',
+    field: 'sourceLocationCode',
+    component: 'Input',
+  },
+  {
+    label: '目的储位编码',
+    field: 'targetLocationCode',
+    component: 'Input',
+  },
+  {
+    label: '来源容器编码',
+    field: 'sourceContainerCode',
+    component: 'Input',
+  },
+  {
+    label: '目的容器编码',
+    field: 'targetContainerCode',
+    component: 'Input',
+  },
+  {
+    label: '执行人',
+    field: 'operator',
+    component: 'Input',
+  },
+  {
+    label: '执行时间',
+    field: 'operationTime',
+    component: 'DatePicker',
+    componentProps: {
+       showTime: true,
+       valueFormat: 'YYYY-MM-DD HH:mm:ss'
+     },
+  },
+  {
+    label: '完成时间',
+    field: 'completedAt',
+    component: 'DatePicker',
+    componentProps: {
+       showTime: true,
+       valueFormat: 'YYYY-MM-DD HH:mm:ss'
+     },
+  },
+  {
+    label: '入库单id',
+    field: 'stockInOrderId',
+    component: 'Input',
+  },
+  {
+    label: '入库明细id',
+    field: 'stockInOrderItemId',
+    component: 'Input',
+  },
+  {
+    label: '波次单id',
+    field: 'waveOrderId',
+    component: 'Input',
+  },
+  {
+    label: '批次号',
+    field: 'batchNumber',
+    component: 'Input',
+  },
+  {
+    label: '保质期',
+    field: 'expiryDate',
+    component: 'DatePicker',
+    componentProps: {
+      valueFormat: 'YYYY-MM-DD'
+    },
+  },
+  {
+    label: '出库单id',
+    field: 'outOrderId',
+    component: 'Input',
+  },
+  {
+    label: '波次拣货明细id',
+    field: 'waveSkuSummaryId',
+    component: 'Input',
+  },
+  {
+    label: '来源仓库',
+    field: 'sourceWarehouseId',
+    component: 'Input',
+  },
+  {
+    label: '目的仓库',
+    field: 'targetWarehouseId',
+    component: 'Input',
+  },
+	// TODO 主键隐藏字段，目前写死为ID
+	{
+	  label: '',
+	  field: 'id',
+	  component: 'Input',
+	  show: false
+	},
+];
+
+// 高级查询数据
+export const superQuerySchema = {
+  taskNumber: {title: '任务号',order: 0,view: 'text', type: 'string',},
+  taskType: {title: '任务类型',order: 1,view: 'text', type: 'string',},
+  taskStatus: {title: '任务状态',order: 2,view: 'text', type: 'string',},
+  productId: {title: '商品id',order: 3,view: 'text', type: 'string',},
+  quantity: {title: '数量',order: 4,view: 'number', type: 'number',},
+  completedQuantity: {title: '完成数量',order: 5,view: 'number', type: 'number',},
+  sourceLocationCode: {title: '来源储位编码',order: 6,view: 'text', type: 'string',},
+  targetLocationCode: {title: '目的储位编码',order: 7,view: 'text', type: 'string',},
+  sourceContainerCode: {title: '来源容器编码',order: 8,view: 'text', type: 'string',},
+  targetContainerCode: {title: '目的容器编码',order: 9,view: 'text', type: 'string',},
+  operator: {title: '执行人',order: 10,view: 'text', type: 'string',},
+  operationTime: {title: '执行时间',order: 11,view: 'datetime', type: 'string',},
+  completedAt: {title: '完成时间',order: 12,view: 'datetime', type: 'string',},
+  stockInOrderId: {title: '入库单id',order: 13,view: 'text', type: 'string',},
+  stockInOrderItemId: {title: '入库明细id',order: 14,view: 'text', type: 'string',},
+  waveOrderId: {title: '波次单id',order: 15,view: 'text', type: 'string',},
+  batchNumber: {title: '批次号',order: 16,view: 'text', type: 'string',},
+  expiryDate: {title: '保质期',order: 17,view: 'date', type: 'string',},
+  outOrderId: {title: '出库单id',order: 18,view: 'text', type: 'string',},
+  waveSkuSummaryId: {title: '波次拣货明细id',order: 19,view: 'text', type: 'string',},
+  sourceWarehouseId: {title: '来源仓库',order: 20,view: 'text', type: 'string',},
+  targetWarehouseId: {title: '目的仓库',order: 21,view: 'text', type: 'string',},
+};
+
+/**
+* 流程表单调用这个方法获取formSchema
+* @param param
+*/
+export function getBpmFormSchema(_formData): FormSchema[]{
+  // 默认和原始表单保持一致 如果流程中配置了权限数据，这里需要单独处理formSchema
+  return formSchema;
+}
