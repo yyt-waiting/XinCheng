@@ -168,9 +168,21 @@ export const receiveColumns: BasicColumn[] = [
     dataIndex: 'ownerName'
   },
   {
+    title: '货主id',
+    align:"center",
+    dataIndex: 'ownerId',
+    ifShow:false,
+  },
+  {
     title: '商品',
     align:"center",
     dataIndex: 'productName'
+  },
+  {
+    title: '商品id',
+    align:"center",
+    dataIndex: 'productId',
+    ifShow:false,
   },
   {
     title: '数量',
@@ -579,6 +591,12 @@ export const receiveFormSchema: FormSchema[] = [
     },
   },
   {
+    label: '货主id',
+    field: 'ownerId',
+    component: 'Input',
+    show: false
+  },
+  {
     label: '商品',
     field: 'productName',
     component: 'Input',
@@ -586,6 +604,12 @@ export const receiveFormSchema: FormSchema[] = [
     componentProps: {
       disabled: true,
     },
+  },
+  {
+    label: '商品ID',
+    field: 'productId',
+    component: 'Input',
+    show: false
   },
   //总数量
    {

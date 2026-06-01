@@ -14,6 +14,8 @@
     const emit = defineEmits(['register','success']);
     const isUpdate = ref(true);
     const isDetail = ref(false);
+    // 保存原始record，用于提交时补充隐藏字段
+    const originalRecord = ref<Recordable>({});
     //表单配置
     const [registerForm, { setProps,resetFields, setFieldsValue, validate, scrollToField }] = useForm({
         schemas: receiveFormSchema,
@@ -27,10 +29,14 @@
         setModalProps({confirmLoading: false,showCancelBtn:!!data?.showFooter,showOkBtn:!!data?.showFooter});
         isUpdate.value = !!data?.isUpdate;
         isDetail.value = !!data?.showFooter;
-        if (unref(isUpdate)) {
-            //表单赋值
+        // 保存原始record
+        originalRecord.value = data?.record || {};
+        if (unref(isUpdate) && data?.record) {
             await setFieldsValue({
                 ...data.record,
+                // 显式注入，避免 show:false 字段被表单丢弃
+                productId: data.record.productId,
+                ownerId: data.record.ownerId,
             });
         }
         // 隐藏底部时禁用整个表单
@@ -43,11 +49,55 @@
         try {
             let values = await validate();
             setModalProps({confirmLoading: true});
-            //提交表单
-            await receive(values);
-            //关闭弹窗
+            // 手动验证用户输入的关键字段
+            if (!values.execQuantity || values.execQuantity <= 0) {
+              createMessage.warn('请输入有效的收货数量');
+              setModalProps({confirmLoading: false});
+              return;
+            }
+            if (!values.inventoryAttribute) {
+              createMessage.warn('请选择库存属性');
+              setModalProps({confirmLoading: false});
+              return;
+            }
+            if (!values.targetLocationCode) {
+              createMessage.warn('请选择储位编码');
+              setModalProps({confirmLoading: false});
+              return;
+            }
+            if (!values.receivingDate) {
+              createMessage.warn('请选择收货日期');
+              setModalProps({confirmLoading: false});
+              return;
+            }
+            // 从 originalRecord 提取所有ID字段，用户输入的覆盖同名字段
+            const submitData = {
+              id: originalRecord.value.id,
+              taskNumber: values.taskNumber,
+              taskType: values.taskType,
+              taskStatus: values.taskStatus,
+              ownerName: values.ownerName,
+              ownerId: originalRecord.value.ownerId,
+              productName: values.productName,
+              productId: originalRecord.value.productId,
+              quantity: values.quantity,
+              completedQuantity: values.completedQuantity,
+              execQuantity: values.execQuantity,
+              inventoryAttribute: values.inventoryAttribute,
+              warehouseName: values.warehouseName,
+              targetWarehouseId: originalRecord.value.targetWarehouseId,
+              targetLocationCode: values.targetLocationCode,
+              batchNumber: values.batchNumber,
+              receivingDate: values.receivingDate,
+              expiryDate: values.expiryDate,
+            };
+            console.log('===== 弹窗提交数据 =====');
+            console.log(JSON.stringify(submitData, null, 2));
+            console.log('productId in submitData:', submitData.productId);
+            console.log('ownerId in submitData:', submitData.ownerId);
+            console.log('========================');
+            await receive(submitData);
             closeModal();
-            //刷新列表
             emit('success');
         } catch ({ errorFields }) {
            if (errorFields) {

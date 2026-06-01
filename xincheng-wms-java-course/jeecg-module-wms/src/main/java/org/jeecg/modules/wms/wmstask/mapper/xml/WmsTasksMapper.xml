@@ -8,7 +8,8 @@
             o.order_number AS stockInOrderNumber,
             w.warehouse_name AS warehouseName,
             c.owner_name AS ownerName,
-            p.product_name AS productName
+            p.product_name AS productName,
+            p.owner_id AS ownerId
         FROM wms_tasks t
         LEFT JOIN wms_stock_in_orders o ON t.stock_in_order_id = o.id
         LEFT JOIN wms_warehouses w ON t.target_warehouse_id = w.id

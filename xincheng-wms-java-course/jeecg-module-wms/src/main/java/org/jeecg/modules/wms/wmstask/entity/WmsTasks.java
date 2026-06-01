@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import org.jeecg.common.constant.ProvinceCityArea;
 import org.jeecg.common.util.SpringContextUtils;
@@ -159,6 +160,10 @@ public class WmsTasks implements Serializable {
 	/**货主名称*/
 	@Schema(description = "货主名称")
 	private transient String ownerName;
+	/**货主ID*/
+	@TableField(exist = false)
+	@Schema(description = "货主ID")
+	private String ownerId;
 	/**商品名称*/
 	@Schema(description = "商品名称")
 	private transient String productName;

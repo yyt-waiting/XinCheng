@@ -65,7 +65,10 @@ export const batchDelete = (params, handleSuccess) => {
  */
 export const receive = (params) => {
   const url = Api.receive;
-  return defHttp.post({ url: url, params });
+  console.log('===== 前端收货提交数据 =====');
+  console.log(JSON.stringify(params, null, 2));
+  console.log('============================');
+  return defHttp.post({ url: url, data: params });
 };
 /**
  * 上架
@@ -73,7 +76,7 @@ export const receive = (params) => {
  */
 export const putaway = (params) => {
   const url = Api.putaway;
-  return defHttp.post({ url: url, params });
+  return defHttp.post({ url: url, data: params });
 };
 /**
  * 保存或者更新

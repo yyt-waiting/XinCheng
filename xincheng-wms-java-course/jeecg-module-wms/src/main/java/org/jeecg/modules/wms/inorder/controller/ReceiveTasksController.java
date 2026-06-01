@@ -64,6 +64,17 @@ public class ReceiveTasksController {
     @Operation(summary = "执行收货任务")
     @PostMapping("/addRecords")
     public Result<String> addRecords(@RequestBody WmsTasksRecords wmsTasksRecords) {
+        log.info("===== 收货请求接收到的数据 =====");
+        log.info("id: {}", wmsTasksRecords.getId());
+        log.info("productId: {}", wmsTasksRecords.getProductId());
+        log.info("ownerId: {}", wmsTasksRecords.getOwnerId());
+        log.info("execQuantity: {}", wmsTasksRecords.getExecQuantity());
+        log.info("taskId: {}", wmsTasksRecords.getTaskId());
+        log.info("targetWarehouseId: {}", wmsTasksRecords.getTargetWarehouseId());
+        log.info("targetLocationCode: {}", wmsTasksRecords.getTargetLocationCode());
+        log.info("batchNumber: {}", wmsTasksRecords.getBatchNumber());
+        log.info("inventoryAttribute: {}", wmsTasksRecords.getInventoryAttribute());
+        log.info("================================");
         String taskId = wmsTasksRecords.getId();
         wmsTasksRecords.setTaskId(taskId);
         wmsTasksRecords.setId(null);
