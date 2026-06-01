@@ -5,15 +5,18 @@ import org.jeecg.modules.wms.inorder.entity.WmsStockInOrderItems;
 import org.jeecg.modules.wms.inorder.mapper.WmsStockInOrderItemsMapper;
 import org.jeecg.modules.wms.inorder.mapper.WmsStockInOrdersMapper;
 import org.jeecg.modules.wms.inorder.service.IWmsStockInOrdersService;
+import org.jeecg.modules.wms.inorder.service.IWmsStockInOrderItemsService;
 import org.jeecg.modules.wms.wmstask.entity.WmsTasks;
 import org.jeecg.modules.wms.wmstask.mapper.WmsTasksMapper;
 import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.common.util.RedisUtil;
+import org.jeecg.modules.wms.config.WarehouseDictEnum;
 import org.jeecg.common.exception.JeecgBootException;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Collection;
@@ -35,6 +38,8 @@ public class WmsStockInOrdersServiceImpl extends ServiceImpl<WmsStockInOrdersMap
 	private WmsTasksMapper wmsTasksMapper;
 	@Autowired
 	private RedisUtil redisUtil;
+	@Autowired
+	private IWmsStockInOrderItemsService wmsStockInOrderItemsService;
 
 	private static final String REDIS_INCR_KEY = "WMS_STOCK_IN_ORDER_NUMBER";
 	
@@ -150,14 +155,18 @@ public class WmsStockInOrdersServiceImpl extends ServiceImpl<WmsStockInOrdersMap
 			throw new RuntimeException("入库单无明细，无法创建收货任务");
 		}
 		for (WmsStockInOrderItems item : items) {
+			Integer expectedQuantity = item.getExpectedQuantity();
+			if (expectedQuantity == null || expectedQuantity == 0) {
+				continue;
+			}
 			WmsTasks task = new WmsTasks();
-			task.setTaskNumber("TASK-" + System.currentTimeMillis() + "-" + item.getId());
-			task.setTaskType("receive");
-			task.setTaskStatus("0");
+			task.setTaskNumber("TASK-" + (System.currentTimeMillis() / 1000) + (int)(Math.random() * 10000));
+			task.setTaskType(WarehouseDictEnum.TASK_TYPE_RECEIVING.getCode());
+			task.setTaskStatus(WarehouseDictEnum.TASK_STATUS_CREATED.getCode());
 			task.setStockInOrderId(id);
 			task.setStockInOrderItemId(item.getId());
 			task.setTargetWarehouseId(warehouseId != null ? warehouseId : order.getWarehouseId());
-			task.setQuantity(item.getExpectedQuantity());
+			task.setQuantity(expectedQuantity);
 			task.setCompletedQuantity(0);
 			wmsTasksMapper.insert(task);
 		}
@@ -175,6 +184,39 @@ public class WmsStockInOrdersServiceImpl extends ServiceImpl<WmsStockInOrdersMap
 		} catch (Exception e) {
 			throw new JeecgBootException("入库单号自动生成失败：" + e.getMessage());
 		}
+	}
+
+	@Override
+	public String updateReceivedStatus(String stockInOrderId) {
+		WmsStockInOrders wmsStockInOrders = getById(stockInOrderId);
+		String currentStatus = wmsStockInOrders.getStatus();
+		// 当前状态只有是收货中(3)或审核通过(2)时方可更新收货状态
+		if (!("3".equals(currentStatus) || "2".equals(currentStatus))) {
+			throw new JeecgBootException("非收货中、审核通过状态入库单不允许更新收货状态，当前状态：" + currentStatus);
+		}
+		// 如果当前是审核通过状态(2)，开始收货时自动转为收货中状态(3)
+		if ("2".equals(currentStatus)) {
+			wmsStockInOrders.setStatus("3");
+			updateById(wmsStockInOrders);
+		}
+		// 1. 查询该入库单的所有明细
+		List<WmsStockInOrderItems> stockInOrderItemsList = wmsStockInOrderItemsService.list(
+			new LambdaQueryWrapper<>(WmsStockInOrderItems.class)
+				.eq(WmsStockInOrderItems::getOrderId, stockInOrderId)
+		);
+		// 2. 汇总数量
+		int totalCompletedQuantity = stockInOrderItemsList.stream().mapToInt(WmsStockInOrderItems::getReceivedQuantity).sum();
+		int totalBadQuantity = stockInOrderItemsList.stream().mapToInt(WmsStockInOrderItems::getDefectiveQuantity).sum();
+		boolean hasUnfinished = stockInOrderItemsList.stream()
+			.anyMatch(item -> !"1".equals(item.getStatus()));
+		String status = hasUnfinished ? "3" : "4";
+		// 3. 更新入库单
+		WmsStockInOrders stockInOrdersUpdate = getById(stockInOrderId);
+		stockInOrdersUpdate.setTotalReceivedQuantity(totalCompletedQuantity);
+		stockInOrdersUpdate.setTotalDefectiveQuantity(totalBadQuantity);
+		stockInOrdersUpdate.setStatus(status);
+		updateById(stockInOrdersUpdate);
+		return status;
 	}
 
 }

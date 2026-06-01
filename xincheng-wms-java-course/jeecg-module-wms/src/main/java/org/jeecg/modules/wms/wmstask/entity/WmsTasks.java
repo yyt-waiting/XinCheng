@@ -150,4 +150,16 @@ public class WmsTasks implements Serializable {
 	@Excel(name = "目的仓库", width = 15)
     @Schema(description = "目的仓库")
     private String targetWarehouseId;
+	/**入库单号*/
+	@Schema(description = "入库单号")
+	private transient String stockInOrderNumber;
+	/**仓库名称*/
+	@Schema(description = "仓库名称")
+	private transient String warehouseName;
+	/**货主名称*/
+	@Schema(description = "货主名称")
+	private transient String ownerName;
+	/**商品名称*/
+	@Schema(description = "商品名称")
+	private transient String productName;
 }

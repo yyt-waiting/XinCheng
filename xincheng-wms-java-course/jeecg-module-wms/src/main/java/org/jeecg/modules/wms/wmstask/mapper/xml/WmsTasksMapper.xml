@@ -2,4 +2,36 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.jeecg.modules.wms.wmstask.mapper.WmsTasksMapper">
 
+    <select id="selectTaskPageWithJoin" resultType="org.jeecg.modules.wms.wmstask.entity.WmsTasks">
+        SELECT
+            t.*,
+            o.order_number AS stockInOrderNumber,
+            w.warehouse_name AS warehouseName,
+            c.owner_name AS ownerName,
+            p.product_name AS productName
+        FROM wms_tasks t
+        LEFT JOIN wms_stock_in_orders o ON t.stock_in_order_id = o.id
+        LEFT JOIN wms_warehouses w ON t.target_warehouse_id = w.id
+        LEFT JOIN wms_products p ON t.product_id = p.id
+        LEFT JOIN wms_cargo_owners c ON p.owner_id = c.id
+        <where>
+            <if test="taskType != null and taskType != ''">
+                AND t.task_type = #{taskType}
+            </if>
+            <if test="taskNumber != null and taskNumber != ''">
+                AND t.task_number LIKE CONCAT('%', #{taskNumber}, '%')
+            </if>
+            <if test="taskStatus != null and taskStatus != ''">
+                AND t.task_status = #{taskStatus}
+            </if>
+            <if test="operator != null and operator != ''">
+                AND t.operator = #{operator}
+            </if>
+            <if test="stockInOrderNumber != null and stockInOrderNumber != ''">
+                AND o.order_number LIKE CONCAT('%', #{stockInOrderNumber}, '%')
+            </if>
+        </where>
+        ORDER BY t.create_time DESC
+    </select>
+
 </mapper>

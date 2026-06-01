@@ -252,7 +252,7 @@ export const wmsStockInOrderItemsColumns = [
   {
     title: '采购数量',
     key: 'expectedQuantity',
-    type: 'number',
+    type: 'input-number',
     width: 120,
     placeholder: '请输入${title}',
     defaultValue: '',
@@ -260,7 +260,7 @@ export const wmsStockInOrderItemsColumns = [
   {
     title: '实际收货数量',
     key: 'receivedQuantity',
-    type: 'number',
+    type: 'input-number',
     width: 140,
     placeholder: '请输入${title}',
     defaultValue: '',
@@ -268,7 +268,7 @@ export const wmsStockInOrderItemsColumns = [
   {
     title: '上架数量',
     key: 'shelvedQuantity',
-    type: 'number',
+    type: 'input-number',
     width: 120,
     placeholder: '请输入${title}',
     defaultValue: '',
@@ -276,7 +276,7 @@ export const wmsStockInOrderItemsColumns = [
   {
     title: '不良品数量',
     key: 'defectiveQuantity',
-    type: 'number',
+    type: 'input-number',
     width: 120,
     placeholder: '请输入${title}',
     defaultValue: '',

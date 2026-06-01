@@ -1,14 +1,16 @@
 package org.jeecg.modules.wms.inventory.service;
 
 import org.jeecg.modules.wms.inventory.entity.WmsInventoryTrans;
+import org.jeecg.modules.wms.inventory.vo.WmsInventoryTransParam;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
- * @Description: 库存变更表
- * @Author: jeecg-boot
- * @Date:   2026-05-31
- * @Version: V1.0
+ * 库存变更服务接口
  */
 public interface IWmsInventoryTransService extends IService<WmsInventoryTrans> {
-
+    /**
+     * 库存变更（通用：收货、上架、拣货等）
+     * @param inventoryTransParam 变更参数
+     */
+    void transfer(WmsInventoryTransParam inventoryTransParam);
 }

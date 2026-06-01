@@ -64,4 +64,11 @@ public interface IWmsStockInOrdersService extends IService<WmsStockInOrders> {
 	 */
 	public void createReceiveTask(String id, String warehouseId);
 
+	/**
+	 * 更新入库单的数量和状态
+	 * @param stockInOrderId 入库单ID
+	 * @return 入库单状态
+	 */
+	String updateReceivedStatus(String stockInOrderId);
+
 }
